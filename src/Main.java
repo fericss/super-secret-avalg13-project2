@@ -19,7 +19,6 @@ public class Main {
 			points[i]=new Point(Double.parseDouble(values[0]),Double.parseDouble(values[1]));
 		}
 		
-		System.out.println(points[1].distanceArea(points[2]));
 		
 		Window w = new Window(points);
 		StupidSolver amagawd = new StupidSolver(points);
