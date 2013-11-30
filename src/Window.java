@@ -80,11 +80,6 @@ public class Window extends JPanel {
         int height = getHeight();           // height of window in pixels
         calculateScale(width, height);
         super.paintComponent(g);            // call superclass to make panel display correctly
-        g.setColor(Color.red);
-        for(Point p : points){
-        	if(p!=null)
-        	g.fillOval((int)(p.x*scale-3-minX), (int)(p.y*scale-3-minY), 6, 6);
-        }
         g.setColor(Color.green);
         if(edges!=null)
         for(Edge e : edges){
@@ -94,6 +89,16 @@ public class Window extends JPanel {
         			(int)(e.from.y*scale-minY), 
         			(int)(e.to.x*scale-minX), 
         			(int)(e.to.y*scale-minY));
+        }
+        Integer i = 0;
+        for(Point p : points){
+        	if(p!=null) {
+                g.setColor(Color.red);
+            	g.fillOval((int)(p.x*scale-3-minX), (int)(p.y*scale-3-minY), 6, 6);
+                g.setColor(Color.blue);
+        		g.drawString(i.toString(), (int)(p.x*scale - minX) + 3, (int)(p.y*scale - minY) - 3 );
+        		i++;
+        	}
         }
         
     }

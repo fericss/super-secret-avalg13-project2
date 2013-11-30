@@ -18,7 +18,7 @@ public class Point {
 	public double distanceArea(Point _p){
 		double _x = (_p.x-x);
 		double _y = (_p.y-y);
-		return _x*_x+_y+_y;
+		return _x*_x+_y*_y;
 	}
 
 	public boolean equals(Object obj){

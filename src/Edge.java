@@ -15,7 +15,7 @@ public class Edge {
 	static double solutionLength(Edge [] solution){
 		double dist = 0.0;
 		for(Edge e : solution){
-			dist+=e.distance();
+			dist+= Math.sqrt(e.distance());
 		}
 		return dist;
 		
