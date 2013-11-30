@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 
 
 public class Main {
+	static Window window;
 	public static void main(String[] args){
 
 		
@@ -20,10 +21,18 @@ public class Main {
 		}
 		
 		
-		Window w = new Window(points);
-		StupidSolver amagawd = new StupidSolver(points);
-		Edge [] solution = amagawd.solve();
-		w.addEdges(solution);
+		window = new Window(points);
+//		StupidSolver amagawd = new StupidSolver(points);
+//		Edge [] solution = amagawd.solve();
+		Edge [] solution = new BruteSolver(points).solve();
+
+		window.addEdges(solution);
+		
+		System.out.println(Edge.solutionLength(solution));
+//		TwoOpt t2 = new TwoOpt();
+//		solution = t2.opt(solution);
+		System.out.println(Edge.solutionLength(solution));
+		window.repaint();
 		
 		
 	}
