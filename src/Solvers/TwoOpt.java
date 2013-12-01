@@ -8,8 +8,8 @@ public class TwoOpt {
 		double best_distance = Edge.solutionLength(solution);
 		int n = solution.length;
 		while(true){
-			for(int i = (int)(Math.random()*n); i<n; i++){
-				for(int j = 0; j<n;j++){
+			for(int i = 0; i<n; i++){
+				for(int j = i+1; j<n;j++){
 					Edge [] newSolution = twoOptSwap(i,j,solution);
 					double new_distance = Edge.solutionLength(newSolution);
 					if(new_distance < best_distance){

@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 import Model.Edge;
 import Model.Point;
-import Solvers.BruteSolver;
+import Solvers.*;
 
 
 public class Main {
@@ -25,14 +25,14 @@ public class Main {
 		
 		window = new Window(points);
 //		StupidSolver amagawd = new StupidSolver(points);
-//		Edge [] solution = amagawd.solve();
-		Edge [] solution = new BruteSolver(points).solve();
+		Edge [] solution = new StupidSolver(points).solve();
+//		Edge [] solution = new BruteSolver(points).solve();
 
 		window.addEdges(solution);
 		
 		System.out.println(Edge.solutionLength(solution));
 //		TwoOpt t2 = new TwoOpt();
-//		solution = t2.opt(solution);
+//		solution = new ThreeOpt().opt(solution);
 		//System.out.println(Edge.solutionLength(solution));
 		
 		window.repaint();

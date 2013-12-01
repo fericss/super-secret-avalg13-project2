@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+/Solvers
+=======
 /BruteSolver.class
 /Edge.class
 /Main.class
@@ -10,3 +13,4 @@
 /Model
 /Main
 *.class
+>>>>>>> branch 'master' of https://fericss@code.google.com/p/super-secret-avalg13-project2
