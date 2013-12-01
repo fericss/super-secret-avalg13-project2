@@ -1,3 +1,7 @@
+package Solvers;
+import Main.Main;
+import Model.Edge;
+
 
 public class TwoOpt {
 	public Edge [] opt(Edge [] solution){
@@ -57,8 +61,8 @@ public class TwoOpt {
 
 	private boolean checkIfValid(Edge[] edges) {
 		boolean [] visited = new boolean[edges.length+1];
-		for(boolean b : visited){
-			b=false;
+		for(int i = 0; i < visited.length; i++){
+			visited[i] = false;	//Note: this might already be done when allocating, research?
 		}
 		int p = edges[0].from.id;
 		int counter = 1;

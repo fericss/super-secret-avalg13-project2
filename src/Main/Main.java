@@ -1,11 +1,13 @@
-import java.math.BigInteger;
+package Main;
 import java.util.Scanner;
 
-import javax.swing.JFrame;
+import Model.Edge;
+import Model.Point;
+import Solvers.BruteSolver;
 
 
 public class Main {
-	static Window window;
+	public static Window window;
 	public static void main(String[] args){
 
 		

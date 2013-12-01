@@ -1,3 +1,7 @@
+package Solvers;
+import Model.Edge;
+import Model.Point;
+
 
 public class BruteSolver {
 	Point [] points;

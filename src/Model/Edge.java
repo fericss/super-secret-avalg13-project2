@@ -1,7 +1,8 @@
+package Model;
 
 public class Edge {
-	Point from;
-	Point to;
+	public Point from;
+	public Point to;
 	//public double distance;
 	public Edge(Point _from, Point _to){
 		from = _from;
@@ -12,7 +13,7 @@ public class Edge {
 	}
 	
 	
-	static double solutionLength(Edge [] solution){
+	public static double solutionLength(Edge [] solution){
 		double dist = 0.0;
 		for(Edge e : solution){
 			dist+= Math.sqrt(e.distance());

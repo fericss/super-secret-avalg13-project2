@@ -1,8 +1,12 @@
+package Main;
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import Model.Edge;
+import Model.Point;
 
 
 public class Window extends JPanel {

@@ -1,3 +1,4 @@
+package Model;
 
 public class Point {
 	public static int PointNumber=0;
