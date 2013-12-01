@@ -3,37 +3,26 @@ import Model.Edge;
 import Model.Point;
 
 
-public class BruteSolver {
+public class BruteSolver extends Solver {
 	Point [] points;
-	private double best_distance = Double.MAX_VALUE;
+	private double best_distance;
 	private Edge[] best_solution;
 	
-	
+	public BruteSolver(){};
 	public BruteSolver(Point [] _points){
-		points = _points;
+		setup(_points);
 	}
+	
+	public void setup(Point[] problem) {
+		best_distance = Double.MAX_VALUE;
+		points = problem;
+	}
+	
 	public Edge [] solve(){
-
-		//Edge [] best_solution = new StupidSolver(points).solve();
-		//double best_distance = Edge.solutionLength(best_solution);
-
 		boolean[] visited = new boolean[points.length];
 		Edge[] start = new Edge[0];
 		solve(start, visited);
 		
-		/*
-		Edge[] test = new Edge[10];
-		test[0] = new Edge(points[0], points[4]);
-		test[1] = new Edge(points[4], points[5]);
-		test[2] = new Edge(points[5], points[3]);
-		test[3] = new Edge(points[3], points[9]);
-		test[4] = new Edge(points[9], points[1]);
-		test[5] = new Edge(points[1], points[7]);
-		test[6] = new Edge(points[7], points[6]);
-		test[7] = new Edge(points[6], points[2]);
-		test[8] = new Edge(points[2], points[8]);
-		test[9] = new Edge(points[8], points[0]);
-		return test; //*/
 		return best_solution;
 	}
 	

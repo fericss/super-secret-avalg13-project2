@@ -26,4 +26,9 @@ public class Point {
 		return (this.id==((Point)obj).id);
 		
 	}
+	
+	@Override
+	public String toString() {
+		return x + " " + y;
+	}
 }

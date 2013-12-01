@@ -3,11 +3,18 @@ import Model.Edge;
 import Model.Point;
 
 
-public class StupidSolver {
+public class StupidSolver extends Solver {
 	Point [] points;
 	public StupidSolver(Point [] _points){
-		points = _points;
+		setup(_points);
 	}
+	
+	public StupidSolver() {	}
+
+	public void setup(Point[] problem) {
+		points = problem;		
+	}
+	
 	public Edge [] solve(){
 		
 		Edge [] solution = new Edge[points.length];
