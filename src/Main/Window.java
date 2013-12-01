@@ -11,6 +11,8 @@ import Model.Point;
 
 public class Window extends JPanel {
 	
+	private static int numWindows = 0;
+	
 	Point [] points;
 	Edge [] edges;
 	double maxX=Double.MIN_VALUE;
@@ -54,27 +56,16 @@ public class Window extends JPanel {
 		minY = minY * scale-20;
 		
 	}
-	public Window(Point [] _points){
+	public Window(Point [] _points,int x, int y){
 		super();
 		points = _points;
         setBackground(Color.gray);
         JFrame frame = new JFrame("Yay graphics");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
-        frame.setSize(1000, 1000);
+        frame.setSize(x, y);
         frame.setVisible(true);
-        this.repaint();
-	}
-	public Window(Point [] _points, Edge [] _edges){
-		super();
-		points = _points;
-		edges = _edges;
-        setBackground(Color.gray);
-        JFrame frame = new JFrame("Yay graphics");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(this);
-        frame.setSize(500, 500);
-        frame.setVisible(true);
+        frame.setLocation((x+20)*(numWindows++)+100, 100);
         this.repaint();
 	}
 	
@@ -106,9 +97,10 @@ public class Window extends JPanel {
         }
         
     }
-	public void addEdges(Edge[] solution) {
+	public Window addEdges(Edge[] solution) {
 		edges = solution;
 		repaint();
+		return this;
 	}
 
 }

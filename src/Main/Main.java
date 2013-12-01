@@ -22,13 +22,15 @@ public class Main {
 			points[i]=new Point(Double.parseDouble(values[0]),Double.parseDouble(values[1]));
 		}
 		
-		
-		window = new Window(points);
-//		StupidSolver amagawd = new StupidSolver(points);
 		Edge [] solution = new StupidSolver(points).solve();
 //		Edge [] solution = new BruteSolver(points).solve();
+		
+		
+		new Window(points, 500,500).addEdges(solution.clone());;
+		window = new Window(points, 500,500).addEdges(solution);;
 
-		window.addEdges(solution);
+
+		
 		
 		System.out.println(Edge.solutionLength(solution));
 //		TwoOpt t2 = new TwoOpt();
