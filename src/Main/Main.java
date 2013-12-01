@@ -32,7 +32,9 @@ public class Main {
 		
 		System.out.println(Edge.solutionLength(solution));
 //		TwoOpt t2 = new TwoOpt();
-//		solution = new ThreeOpt().opt(solution);
+		new ThreeOpt().opt(solution);
+		new TwoOpt().opt(solution);
+		System.out.println("done");
 		//System.out.println(Edge.solutionLength(solution));
 		
 		window.repaint();

@@ -5,10 +5,12 @@ import Model.Point;
 
 
 public class ThreeOpt {
-	public Edge [] opt(Edge [] solution){
+	public void opt(Edge [] solution){
 		double best_distance = Edge.solutionLength(solution);
 		int n = solution.length;
+		boolean breakLoop = false;
 		while(true){
+			double old_best_distance = best_distance;
 			for(int i = 0; i<n; i++){
 				for(int j = 0; j<n; j++){
 					for(int k = 0; k<n; k++){
@@ -22,15 +24,24 @@ public class ThreeOpt {
 							solution[k] = newSolution[k];
 							best_distance = new_distance;
 							Main.window.repaint();
-							System.out.println(best_distance);
-							try {
-								Thread.sleep(500);
-							} catch (InterruptedException e) {
-								e.printStackTrace();
-							}
+							System.out.println("3opt: "+best_distance);
+//							try {
+//								Thread.sleep(500);
+//							} catch (InterruptedException e) {
+//								e.printStackTrace();
+//							}
 						}
 					}
 				}
+			}
+			if(old_best_distance==best_distance){
+				if(breakLoop){
+					break;
+				}
+				breakLoop = true;
+			}
+			else{
+				breakLoop = false;
 			}
 		}
 	}
@@ -148,6 +159,7 @@ public class ThreeOpt {
 		return counter==edges.length; 
 		
 	}
+
 
 
 

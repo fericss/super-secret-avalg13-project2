@@ -48,7 +48,7 @@ public class Window extends JPanel {
 			scale = (X-20)/(maxX);
 		}
 		else{
-			scale = (Y-20)/(maxY);
+			scale = (Y-40)/(maxY);
 		}
 		minX = minX * scale-20;
 		minY = minY * scale-20;
