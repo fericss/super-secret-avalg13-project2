@@ -8,6 +8,7 @@ import java.util.Random;
 
 import Model.Edge;
 import Model.Point;
+import Solvers.BruteSolver;
 import Solvers.GreedySolver;
 import Solvers.Solver;
 
@@ -18,9 +19,15 @@ public class TestGenerator {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+
+		File optTest = new File("tests\\2v3.tst");
+		opt2v3Test(optTest);
+		
+		/*
 		File circle = new File("tests\\circle.tst");
 		circleTest(circle);
-		
+		//*/
+		/*		
 		for(int i = 15; i <= 1000; i*=2) {
 			double start = System.currentTimeMillis();
 			File f = new File("tests\\rnd" + i + ".tst");
@@ -28,6 +35,45 @@ public class TestGenerator {
 			double finish = System.currentTimeMillis();
 			System.out.println(i + " finished in " + (finish-start)/1000 + "s");
 		}
+		//*/
+	}
+	
+	public static void opt2v3Test(File f) throws IOException {
+		int numPoints = 9;
+		Point[] coords = {
+			new Point(0.0, 0.0),
+			new Point(2.0, 0.0),
+			new Point(2.5, 3.0),
+			new Point(3.0, 0.0),
+			new Point(5.0, 0.0),
+			new Point(5.0, 4.0),
+			new Point(3.0, 4.0),
+			new Point(2.0, 4.0),
+			new Point(0.0, 4.0) 
+		};
+		Edge[] solution = {
+			new Edge(coords[0], coords[1]),
+			new Edge(coords[1], coords[3]),
+			new Edge(coords[3], coords[4]),
+			new Edge(coords[4], coords[5]),
+			new Edge(coords[5], coords[6]),
+			new Edge(coords[6], coords[2]),
+			new Edge(coords[2], coords[7]),
+			new Edge(coords[7], coords[8]),
+			new Edge(coords[8], coords[0])
+		};
+		BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+
+		bw.write(numPoints + "\n");
+		for(int i = 0; i < numPoints; i++) {
+			bw.write(coords[i] + "\n");			
+		}
+		
+		solution = new BruteSolver(coords).solve();
+		
+		double dist = Edge.solutionLength(solution);
+		bw.write(dist + "\n");
+		bw.close();
 	}
 	
 	public static void randTest(File f, int numPoints) throws IOException {

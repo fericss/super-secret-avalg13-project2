@@ -4,6 +4,8 @@ import java.util.Scanner;
 import Model.Edge;
 import Model.Point;
 import Solvers.BruteSolver;
+import Solvers.StupidSolver;
+import Solvers.TwoOpt;
 
 
 public class Main {
@@ -24,16 +26,17 @@ public class Main {
 		
 		
 		window = new Window(points);
-//		StupidSolver amagawd = new StupidSolver(points);
-//		Edge [] solution = amagawd.solve();
-		Edge [] solution = new BruteSolver(points).solve();
+		StupidSolver amagawd = new StupidSolver(points);
+		Edge [] solution = amagawd.solve();
+//		Edge [] solution = new BruteSolver(points).solve();
 
 		window.addEdges(solution);
 		
 		System.out.println(Edge.solutionLength(solution));
-//		TwoOpt t2 = new TwoOpt();
-//		solution = t2.opt(solution);
-		//System.out.println(Edge.solutionLength(solution));
+		TwoOpt t2 = new TwoOpt();
+		solution = t2.opt(solution);
+		System.out.println(Edge.solutionLength(solution));
+		
 		
 		window.repaint();
 		

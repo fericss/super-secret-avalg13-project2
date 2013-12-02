@@ -45,13 +45,13 @@ public class Window extends JPanel {
 			}
 		}
 		if(maxX>maxY){
-			scale = (X-20)/(maxX);
+			scale = (X-30)/(maxX);
 		}
 		else{
-			scale = (Y-20)/(maxY);
+			scale = (Y-30)/(maxY);
 		}
-		minX = minX * scale-20;
-		minY = minY * scale-20;
+		minX = minX * scale-15;
+		minY = minY * scale-15;
 		
 	}
 	public Window(Point [] _points){
