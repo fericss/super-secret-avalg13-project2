@@ -2,14 +2,17 @@ package Solvers;
 import Main.Main;
 import Model.Edge;
 
-
 public class TwoOpt {
-	public Edge [] opt(Edge [] solution){
+	private boolean breakLoop;
+
+
+	public void opt(Edge [] solution){
 		double best_distance = Edge.solutionLength(solution);
 		int n = solution.length;
 		while(true){
-			for(int i = (int)(Math.random()*n); i<n; i++){
-				for(int j = 0; j<n;j++){
+			double old_best_distance = best_distance;
+			for(int i = 0; i<n; i++){
+				for(int j = i+1; j<n;j++){
 					Edge [] newSolution = twoOptSwap(i,j,solution);
 					double new_distance = Edge.solutionLength(newSolution);
 					if(new_distance < best_distance){
@@ -17,14 +20,24 @@ public class TwoOpt {
 						solution[j] = newSolution[j];
 						best_distance = new_distance;
 						Main.window.repaint();
-						System.out.println(best_distance);
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+						System.out.println("2opt: "+best_distance);
+//						try {
+//							Thread.sleep(100);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
 					}
 				}
+			}
+			
+			if(old_best_distance==best_distance){
+				if(breakLoop){
+					break;
+				}
+				breakLoop = true;
+			}
+			else{
+				breakLoop = false;
 			}
 		}
 	}
