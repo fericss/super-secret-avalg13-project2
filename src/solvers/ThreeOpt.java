@@ -1,7 +1,8 @@
-package Solvers;
-import Main.Main;
-import Model.Edge;
-import Model.Point;
+package solvers;
+import model.Edge;
+import model.Point;
+import runnable.Main;
+
 
 
 public class ThreeOpt {
@@ -14,22 +15,24 @@ public class ThreeOpt {
 			for(int i = 0; i<n; i++){
 				for(int j = 0; j<n; j++){
 					for(int k = 0; k<n; k++){
-						
+
 						Edge [] newSolution = findBestReconnection(i,j,k,solution);
 						double new_distance = Edge.solutionLength(newSolution);
-						
+
 						if(new_distance < best_distance && checkIfValid(newSolution)){
 							solution[i] = newSolution[i];
 							solution[j] = newSolution[j];
 							solution[k] = newSolution[k];
 							best_distance = new_distance;
-							Main.window.repaint();
-							System.out.println("3opt: "+best_distance);
-//							try {
-//								Thread.sleep(500);
-//							} catch (InterruptedException e) {
-//								e.printStackTrace();
-//							}
+							if(!Main.KATTIS_MODE){
+								Main.window.repaint();
+								System.out.println("3opt: "+best_distance);
+								//							try {
+								//								Thread.sleep(500);
+								//							} catch (InterruptedException e) {
+								//								e.printStackTrace();
+								//							}
+							}
 						}
 					}
 				}
@@ -54,7 +57,7 @@ public class ThreeOpt {
 		if(i==j || i==k || j==k){
 			return solution;
 		}
-		
+
 		edgeSwap3opt(tempArray,i,j,k,
 				solution[i].from,solution[i].to,
 				solution[j].from,solution[k].from,
@@ -126,12 +129,12 @@ public class ThreeOpt {
 		solution[i] = p;
 		solution[j] = q;
 		solution[k] = r;
-		
+
 	}
 
 
 	private boolean checkIfValid(Edge[] edges) {
-		boolean [] visited = new boolean[edges.length+1];
+		boolean [] visited = new boolean[edges.length];
 		for(int i = 0; i < visited.length; i++){
 			visited[i] = false;	//Note: this might already be done when allocating, research?
 		}
@@ -139,25 +142,25 @@ public class ThreeOpt {
 		int counter = 1;
 		visited[p] = true;
 		loop:
-		while(true){
-			for(Edge e : edges){
-				if(e.from.id==p && !visited[e.to.id]){
-					visited[e.to.id] = true;
-					p = e.to.id;
-					counter++;
-					continue loop;
+			while(true){
+				for(Edge e : edges){
+					if(e.from.id==p && !visited[e.to.id]){
+						visited[e.to.id] = true;
+						p = e.to.id;
+						counter++;
+						continue loop;
+					}
+					if(e.to.id==p && !visited[e.from.id]){
+						visited[e.from.id] = true;
+						p = e.from.id;
+						counter++;
+						continue loop;
+					}
 				}
-				if(e.to.id==p && !visited[e.from.id]){
-					visited[e.from.id] = true;
-					p = e.from.id;
-					counter++;
-					continue loop;
-				}
+				break;
 			}
-			break;
-		}
 		return counter==edges.length; 
-		
+
 	}
 
 

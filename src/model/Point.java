@@ -1,4 +1,6 @@
-package Model;
+package model;
+
+
 
 public class Point {
 	public static int PointNumber=0;
@@ -6,8 +8,11 @@ public class Point {
 	public int id;
 	public double x;
 	public double y;
+	
+	public Point [] nearbyPoints;
+	
 	public Point(double d, double e){
-		id = ++PointNumber;
+		id = PointNumber++;
 		x = d;
 		y = e;
 	}

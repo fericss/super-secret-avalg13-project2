@@ -1,12 +1,15 @@
-package Main;
+package graphics;
+
+
 import java.awt.Color;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Model.Edge;
-import Model.Point;
+import model.Edge;
+import model.Point;
+import model.Solution;
 
 
 public class Window extends JPanel {
@@ -85,14 +88,12 @@ public class Window extends JPanel {
         			(int)(e.to.x*scale-minX), 
         			(int)(e.to.y*scale-minY));
         }
-        Integer i = 0;
         for(Point p : points){
         	if(p!=null) {
                 g.setColor(Color.red);
             	g.fillOval((int)(p.x*scale-3-minX), (int)(p.y*scale-3-minY), 6, 6);
                 g.setColor(Color.blue);
-        		g.drawString(i.toString(), (int)(p.x*scale - minX) + 3, (int)(p.y*scale - minY) - 3 );
-        		i++;
+        		g.drawString(""+p.id, (int)(p.x*scale - minX) + 3, (int)(p.y*scale - minY) - 3 );
         	}
         }
         
@@ -100,6 +101,10 @@ public class Window extends JPanel {
 	public Window addEdges(Edge[] solution) {
 		edges = solution;
 		repaint();
+		return this;
+	}
+	public Window addSolution(Point[] points2, Solution solution) {
+		// TODO Auto-generated method stub
 		return this;
 	}
 

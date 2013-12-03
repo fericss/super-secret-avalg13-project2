@@ -10,3 +10,7 @@
 /Model
 /Main
 *.class
+/graphics
+/model
+/runnable
+/solvers

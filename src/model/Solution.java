@@ -1,10 +1,13 @@
-package Model;
+package model;
 
 public class Solution {
 	public Link[] links;
+	public TSPProblem problem;
 	
-	public Solution(int size) {
-		links = new Link[size];
+	public Solution(TSPProblem _problem) {
+		problem = _problem;
+		links = new Link[problem.size];
+		
 	}
 	
 	/**
@@ -138,14 +141,36 @@ public class Solution {
 		
 	} //Link
 	
-	public static void main(String[] args) {
-		Solution s = new Solution(4);
-		for(int i = 0; i < 4; i++) {
-			s.addLink(i, (i+1)%4);
+//	public static void main(String[] args) {
+//		Solution s = new Solution(4);
+//		for(int i = 0; i < 4; i++) {
+//			s.addLink(i, (i+1)%4);
+//		}
+//		System.out.println(s);
+//		s.switchLinks(0, 1, 3, 2);
+//		System.out.println(s);
+//	}
+
+	public double distance() {
+		double dist = 0;
+		int prev = 0;
+		int current = links[0].getNext();
+		
+		while(current != 0) {
+			int next = links[current].getNext(prev);
+			dist += Math.sqrt(problem.distance(current, next));
+			prev = current;
+			current = next;
 		}
-		System.out.println(s);
-		s.switchLinks(0, 1, 3, 2);
-		System.out.println(s);
+		int next = links[current].getNext(prev);
+		dist += Math.sqrt(problem.distance(current, next));
+		return dist;
+	}
+
+	public void printSolution() {
+		// TODO Auto-generated method stub
+		System.out.println(this);
+		
 	}
 	
 } //Solution
