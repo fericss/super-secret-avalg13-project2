@@ -7,7 +7,24 @@ public class Solution {
 	public Solution(TSPProblem _problem) {
 		problem = _problem;
 		links = new Link[problem.size];
-		
+		for(Point p : problem.points){
+			p.findNearbyPoints(this);
+		}
+	}
+	
+	/**
+	 * Use if you dare.
+	 * @param from
+	 * @param old_to
+	 * @param new_to
+	 */
+	public void changeLinkDestination(int from, int old_to, int new_to){
+		if(links[from].first==old_to){
+			links[from].first=new_to;
+		}
+		else if(links[from].second==old_to){
+			links[from].second=new_to;
+		}
 	}
 	
 	/**
@@ -153,17 +170,15 @@ public class Solution {
 
 	public double distance() {
 		double dist = 0;
-		int prev = 0;
-		int current = links[0].getNext();
-		
-		while(current != 0) {
-			int next = links[current].getNext(prev);
+		int prev = links[0].getNext();
+		int current = 0;
+		int next = -1;
+		while(next != 0) {
+			next = links[current].getNext(prev);
 			dist += Math.sqrt(problem.distance(current, next));
 			prev = current;
 			current = next;
 		}
-		int next = links[current].getNext(prev);
-		dist += Math.sqrt(problem.distance(current, next));
 		return dist;
 	}
 
