@@ -71,7 +71,7 @@ public class Main {
 		else{
 
 			window = new Window(problem, 500, 500);
-			solution = new HullSolver(problem).solve(window);
+			solution = new HullSolver(problem).solve(window, true);
 			//		Edge [] solution = new BruteSolver(points).solve();
 
 

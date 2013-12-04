@@ -39,7 +39,7 @@ public class HullSolver extends Solver {
 		// Pairwise comparison: find min-dist, OR
 		// find max(min-dist)
 		while(unvisit.size() > 0) {
-			findMinCost(s, visit, unvisit);
+			findClosest(s, visit, unvisit);
 		}
 		
 		return s;
@@ -50,7 +50,7 @@ public class HullSolver extends Solver {
 	 * @param w Window in which to show solution
 	 * @return
 	 */
-	public Solution solve(Window w) {
+	public Solution solve(Window w, boolean closest) {
 		Solution s = monotoneChain();
 		LinkedList<Point> visit = new LinkedList<Point>();
 		LinkedList<Point> unvisit = new LinkedList<Point>();
@@ -64,7 +64,11 @@ public class HullSolver extends Solver {
 		// Pairwise comparison: find min-dist, OR
 		// find max(min-dist)
 		while(unvisit.size() > 0) {
-			findMinCost(s, visit, unvisit);
+			if(closest) {
+				findClosest(s, visit, unvisit);				
+			} else {
+				findFarthest(s, visit, unvisit);
+			}
 			try {
 				Thread.sleep(10000/problem.size);
 			} catch (InterruptedException e) {
@@ -77,7 +81,7 @@ public class HullSolver extends Solver {
 		return s;
 	}
 	
-	public void findMinCost(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
+	public void findClosest(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
 		double bestCost = Double.MAX_VALUE;
 		int[] bestPoints = new int[3];
 		for(Point p : unvisit) {
@@ -107,6 +111,45 @@ public class HullSolver extends Solver {
 		s.switchLinks(bestPoints[0], bestPoints[0], bestPoints[1], bestPoints[2]);
 		visit.add(problem.points[bestPoints[0]]);
 		unvisit.remove(problem.points[bestPoints[0]]);
+	}
+	
+	public void findFarthest(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
+		double worstCost = -Double.MAX_VALUE;
+		int[] worstPoints = new int[3];
+		for(Point p : unvisit) {
+			double bestCost = Double.MAX_VALUE;
+			int[] bestPoints = new int[3];
+			int start = visit.get(0).id;
+			
+			int prev = start;
+			int curr = s.links[start].getNext();
+			double prevdist = problem.distance(prev, p.id);
+			while(curr != start) {
+				double cost = prevdist - problem.distance(prev, curr);
+				prevdist = problem.distance(curr, p.id);
+				cost += prevdist;
+				if(cost < bestCost) {
+					bestCost = cost;
+					bestPoints[0] = p.id;
+					bestPoints[1] = prev;
+					bestPoints[2] = curr;
+				}
+				int temp = curr;
+				curr = s.links[curr].getNext(prev);
+				prev = temp;
+			}
+			
+			if(bestCost > worstCost) {
+				worstCost = bestCost;
+				worstPoints = bestPoints;
+			}
+		}
+		//System.out.println("Connecting " + bestPoints[0] + " to " + bestPoints[1] + " and " + bestPoints[2]);
+		//s.printSolution();
+		s.addLink(worstPoints[0], worstPoints[0]);
+		s.switchLinks(worstPoints[0], worstPoints[0], worstPoints[1], worstPoints[2]);
+		visit.add(problem.points[worstPoints[0]]);
+		unvisit.remove(problem.points[worstPoints[0]]);
 	}
 	
 	private double ccw(Point p1, Point p2, Point p3) {
