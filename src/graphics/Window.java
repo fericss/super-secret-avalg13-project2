@@ -19,7 +19,6 @@ public class Window extends JPanel {
 	private static int numWindows = 0;
 	
 	Point [] points;
-	//Edge [] edges;
 	Solution solution;
 	double maxX=Double.MIN_VALUE;
 	double maxY=Double.MIN_VALUE;
@@ -74,7 +73,7 @@ public class Window extends JPanel {
         frame.setLocation((x+20)*(numWindows++)+100, 100);
         this.repaint();
 	}
-	
+
 	public void paintComponent(Graphics g)  // draw graphics in the panel
     {
         int width = getWidth();             // width of window in pixels
@@ -87,21 +86,15 @@ public class Window extends JPanel {
 
             Point p0 = points[seq.get(0)];
         	Point prev = p0;
-            for(int i = 1; i < seq.size(); i++){
-            	Point curr = points[seq.get(i)];
+            for(int i = 1; i < seq.size() + 1; i++){
+            	Point curr = points[seq.get(i%seq.size())];
             	g.drawLine(
             			(int)(prev.x*scale-minX), 
             			(int)(prev.y*scale-minY), 
             			(int)(curr.x*scale-minX), 
             			(int)(curr.y*scale-minY));
             	prev = curr;
-            }
-        	g.drawLine(
-        			(int)(prev.x*scale-minX), 
-        			(int)(prev.y*scale-minY), 
-        			(int)(p0.x*scale-minX), 
-        			(int)(p0.y*scale-minY));
-            
+            }            
         }
         for(Point p : points){
         	if(p!=null) {
