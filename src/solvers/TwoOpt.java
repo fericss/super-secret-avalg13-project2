@@ -16,10 +16,10 @@ public class TwoOpt {
 
 	public void opt(Solution solution){
 		double best_distance = solution.distance();
-		int n = solution.problem.size;
+//		int n = solution.problem.size;
 		loop:
 		while(true){
-			int prev = solution.links[0].getNext();
+//			int prev = solution.links[0].getNext();
 			int from = 0;
 			int to = -1;
 
@@ -34,14 +34,13 @@ public class TwoOpt {
 					int from1 = p.id;
 					int to1 = solution.links[p.id].next;
 					double difference = twoOptSwapDifference(from, to, from1, to1, solution);
-					if(difference<0){
+					if(difference < 0){
 						best_distance+=difference;
 						solution.switchLinks(from, to, from1, to1);
 						continue loop2;
 					}
-
 				}
-				prev = from;
+//				prev = from;
 				from = to;
 			}
 

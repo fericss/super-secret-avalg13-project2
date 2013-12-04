@@ -21,19 +21,21 @@ public class Point {
 
 	public void findNearbyPoints(Solution sol){
 		nearbyPoints = new Point[Main.NumNearbyPoints];
+		int y = 0;
 		for(Point p : sol.problem.points){
+			if(p == this) continue;
 			double distance = sol.problem.distance(p.id, this.id);
-			for(int i = 0; i<nearbyPoints.length ; i++){
-				if(nearbyPoints[i]==null){
-					nearbyPoints[i] = p;
-					break;
-				}
-				else if(sol.problem.distance(nearbyPoints[i].id, this.id)>distance){
-					if(i<nearbyPoints.length-1){
-						nearbyPoints[i+1] = nearbyPoints[i];
+			if(y < Main.NumNearbyPoints) {
+				nearbyPoints[y++] = p;
+			} else {
+				for(int i = 0; i<nearbyPoints.length ; i++){
+					if(sol.problem.distance(nearbyPoints[i].id, this.id)>distance){
+						if(i<nearbyPoints.length-1){
+							nearbyPoints[i+1] = nearbyPoints[i];
+						}
+						nearbyPoints[i] = p;
+						break;
 					}
-					nearbyPoints[i] = p;
-					break;
 				}
 			}
 		}

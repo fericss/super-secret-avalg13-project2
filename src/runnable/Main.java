@@ -40,7 +40,7 @@ public class Main {
 			NumNearbyPoints = 10;
 		}
 		else{
-			NumNearbyPoints = numPoints;
+			NumNearbyPoints = numPoints - 1;
 		}
 		
 		Point [] points = new Point[numPoints];
@@ -71,9 +71,9 @@ public class Main {
 		else{
 
 			window = new Window(problem, 500, 500);
-//			solution = new HullSolver(problem).solve();
+			solution = new HullSolver(problem).solve();
 //			solution = new HullSolver(problem).solve(window, false);
-			solution = new GreedySolver(problem).solve();
+//			solution = new GreedySolver(problem).solve();
 			//solution = new BruteSolver(points).solve();
 
 
@@ -84,7 +84,7 @@ public class Main {
 			System.out.println(solution.distance());
 
 			//		TwoOpt t2 = new TwoOpt();
-			new TwoOpt().opt(solution);
+//			new TwoOpt().opt(solution);
 			//		new ThreeOpt().opt(solution);
 			//		new TwoOpt().opt(solution);
 			System.out.println("done");
