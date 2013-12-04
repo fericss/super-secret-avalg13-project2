@@ -3,6 +3,7 @@ package graphics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -10,6 +11,7 @@ import javax.swing.JPanel;
 import model.Edge;
 import model.Point;
 import model.Solution;
+import model.TSPProblem;
 
 
 public class Window extends JPanel {
@@ -17,7 +19,8 @@ public class Window extends JPanel {
 	private static int numWindows = 0;
 	
 	Point [] points;
-	Edge [] edges;
+	//Edge [] edges;
+	Solution solution;
 	double maxX=Double.MIN_VALUE;
 	double maxY=Double.MIN_VALUE;
 	double minX=Double.MAX_VALUE;
@@ -59,9 +62,9 @@ public class Window extends JPanel {
 		minY = minY * scale-20;
 		
 	}
-	public Window(Point [] _points,int x, int y){
+	public Window(TSPProblem prob,int x, int y){
 		super();
-		points = _points;
+		points = prob.points;
         setBackground(Color.gray);
         JFrame frame = new JFrame("Yay graphics");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -79,14 +82,26 @@ public class Window extends JPanel {
         calculateScale(width, height);
         super.paintComponent(g);            // call superclass to make panel display correctly
         g.setColor(Color.green);
-        if(edges!=null)
-        for(Edge e : edges){
-        	if(e!=null)
+        if(solution != null) {
+        	ArrayList<Integer> seq = solution.getSequence();
+
+            Point p0 = points[seq.get(0)];
+        	Point prev = p0;
+            for(int i = 1; i < seq.size(); i++){
+            	Point curr = points[seq.get(i)];
+            	g.drawLine(
+            			(int)(prev.x*scale-minX), 
+            			(int)(prev.y*scale-minY), 
+            			(int)(curr.x*scale-minX), 
+            			(int)(curr.y*scale-minY));
+            	prev = curr;
+            }
         	g.drawLine(
-        			(int)(e.from.x*scale-minX), 
-        			(int)(e.from.y*scale-minY), 
-        			(int)(e.to.x*scale-minX), 
-        			(int)(e.to.y*scale-minY));
+        			(int)(prev.x*scale-minX), 
+        			(int)(prev.y*scale-minY), 
+        			(int)(p0.x*scale-minX), 
+        			(int)(p0.y*scale-minY));
+            
         }
         for(Point p : points){
         	if(p!=null) {
@@ -98,13 +113,14 @@ public class Window extends JPanel {
         }
         
     }
-	public Window addEdges(Edge[] solution) {
-		edges = solution;
+//	public Window addEdges(Edge[] solution) {
+//		edges = solution;
+//		repaint();
+//		return this;
+//	}
+	public Window addSolution(Solution _solution) {
+		solution = _solution;
 		repaint();
-		return this;
-	}
-	public Window addSolution(Point[] points2, Solution solution) {
-		// TODO Auto-generated method stub
 		return this;
 	}
 

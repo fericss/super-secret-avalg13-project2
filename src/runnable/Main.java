@@ -51,11 +51,12 @@ public class Main {
 		}
 		else{
 
-			solution = new GreedySolver(problem).solve();
+			window = new Window(problem, 500, 500);
+			solution = new HullSolver(problem).solve(window);
 			//		Edge [] solution = new BruteSolver(points).solve();
 
 
-//			new Window(points, 500,500).addSolution(points,solution);
+			//new Window(problem, 500, 500).addSolution(solution);
 //			window = new Window(points, 500,500).addSolution(points,solution);
 
 

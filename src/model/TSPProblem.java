@@ -21,7 +21,7 @@ public class TSPProblem {
 		if(i == j) return 0;
 		
 		if(dist[i][j] == Double.MAX_VALUE) {
-			double d = points[i].distanceArea(points[j]);
+			double d = Math.sqrt(points[i].distanceArea(points[j]));
 			dist[i][j] = d;
 			dist[j][i] = d;
 		}

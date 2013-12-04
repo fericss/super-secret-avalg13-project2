@@ -1,5 +1,7 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Solution {
 	public Link[] links;
 	public TSPProblem problem;
@@ -42,16 +44,16 @@ public class Solution {
 		// Make sure every link is pointing in the right direction
 		// I.e. the first index should be swapped
 		if(lFrom1.first != to1) lFrom1.reverse();
-		if(lTo1.first != from1) lTo1.reverse();	
+		if(lTo1.second != from1) lTo1.reverse();	
 		if(lFrom2.first != to2) lFrom2.reverse();
-		if(lTo2.first != from2) lTo2.reverse();
+		if(lTo2.second != from2) lTo2.reverse();
 		
 		// Make the swaps
 		lFrom1.first = to2;
-		lTo2.first = from1;
+		lTo2.second = from1;
 		
 		lFrom2.first = to1;
-		lTo1.first = from2;
+		lTo1.second = from2;
 	}
 	
 	public String toString() {
@@ -70,6 +72,27 @@ public class Solution {
 		}
 		
 		return sb.toString();
+	}
+	
+	public ArrayList<Integer> getSequence() {
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		int i;
+    	for(i = 0; i < links.length; i++) {
+    		if(links[i] != null) break;  
+    	}
+    	
+    	int prev = i;
+    	list.add(prev);
+		int current = links[prev].getNext();
+		
+		while(current != i) {
+			list.add(current);
+			
+			int next = links[current].getNext(prev);
+			prev = current;
+			current = next;
+		}
+		return list;		
 	}
 	
 	public void addLink(Edge e) {
