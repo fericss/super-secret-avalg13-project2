@@ -27,34 +27,16 @@ public class TwoOpt {
 
 			loop2:
 			while(to != 0) {
-				to = solution.links[from].getNext(prev);
-				//				dist += Math.sqrt(solution.problem.distance(current, next));
-//				System.out.println("Checking link from "+from+" to "+to);
-//				try {
-//					Thread.sleep(1000);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-//				System.out.println(from+">"+to);
+				to = solution.links[from].getNext();
 				Point [] nearby = solution.problem.points[from].nearbyPoints;
 
 				for(Point p : nearby){
 					int from1 = p.id;
-					int to1 = solution.links[p.id].first;
+					int to1 = solution.links[p.id].next;
 					double difference = twoOptSwapDifference(from, to, from1, to1, solution);
 					if(difference<0){
 						best_distance+=difference;
-//						System.out.println("derp?");
-//						System.out.println("changing "+from+":"+to+" to "+from1+":"+to1);
-						twoOptSwap(from,to,from1,to1,solution);
-//						System.out.println("derp!");
-//						System.out.println(solution.distance());
-//						Main.window.repaint();
-//						try {
-//							Thread.sleep(500);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
+						solution.switchLinks(from, to, from1, to1);
 						continue loop2;
 					}
 
@@ -62,23 +44,6 @@ public class TwoOpt {
 				prev = from;
 				from = to;
 			}
-
-
-			//			for(int i = 0; i<n; i++){
-			//				for(int j = i+1; j<n;j++){
-			//					double new_distance = twoOptSwapDistance(i,j,solution);
-			//					//					if(new_distance < best_distance){
-			//					//						solution[i] = newSolution[i];
-			//					//						solution[j] = newSolution[j];
-			//					best_distance = new_distance;
-			//					if(!Main.KATTIS_MODE){
-			//						Main.window.repaint();
-			//						System.out.println("2opt: "+best_distance);
-			//
-			//					}
-			//				}
-			//			}
-			//		}
 
 			if(old_best_distance==best_distance){
 				if(breakLoop){
@@ -105,7 +70,7 @@ public class TwoOpt {
 
 			loop2:
 			while(to != 0) {
-				to = solution.links[from].getNext(prev);
+				to = solution.links[from].getNext();
 				//				dist += Math.sqrt(solution.problem.distance(current, next));
 //				System.out.println("Checking link from "+from+" to "+to);
 //				try {
@@ -121,7 +86,7 @@ public class TwoOpt {
 				}
 				for(Point p : nearby){
 					int from1 = p.id;
-					int to1 = solution.links[p.id].first;
+					int to1 = solution.links[p.id].next;
 					double difference = twoOptSwapDifference(from, to, from1, to1, solution);
 					if(difference<0){
 						best_distance+=difference;
@@ -189,7 +154,7 @@ public class TwoOpt {
 		while(next != to1) {
 //			System.out.println(from+" "+to+" >> "+from1+" "+to1);
 //			System.out.println(">"+current);
-			next = solution.links[current].getNext(prev);
+			next = solution.links[current].getNext();
 //			System.out.println(next);
 			solution.links[current].reverse();
 

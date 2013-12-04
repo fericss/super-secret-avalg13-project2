@@ -21,17 +21,17 @@ public class Solution {
 	 * @param new_to
 	 */
 	public void changeLinkDestination(int from, int old_to, int new_to){
-		if(links[from].first==old_to){
-			links[from].first=new_to;
+		if(links[from].next==old_to){
+			links[from].next=new_to;
 		}
-		else if(links[from].second==old_to){
-			links[from].second=new_to;
+		else if(links[from].prev==old_to){
+			links[from].prev=new_to;
 		}
 	}
 	
 	/**
-	 * Switches the links (from1 <-> to1) and (from2 <-> to2) such that
-	 * (from1 <-> to2) and (from2 <-> to1)
+	 * Switches the links (from1 -> to1) and (from2 -> to2) such that
+	 * (from1 -> from2) and (to2 -> to1)
 	 * 
 	 * CAREFUL with ordering, no error checks
 	 * 
@@ -43,14 +43,11 @@ public class Solution {
 	/*
 	 * High-tech ASCII visualization:
 	 * 
-	 * (f1)---(t1)	->	(f1)   (t1)
-	 *				->		 x
-	 * (f2)---(t2)	->	(f2)   (t2)
+	 * (f1)-->(t1)	->	(f1)   (t1)
+	 * 				->	 |		^
+	 *				->	 v		|	 
+	 * (t2)<--(f2)	->	(f2)   (t2)
 	 * 
-	 * 
-	 * (f1)---(t1)	->	(f1)   (t1)
-	 *				->	 |	 	|
-	 * (t2)---(f2)	->	(t2)   (f2)
 	 */
 	public void switchLinks(int from1, int to1, int from2, int to2) {
 		Link lFrom1 = links[from1];
@@ -60,32 +57,35 @@ public class Solution {
 		
 		// Make sure every link is pointing in the right direction
 		// I.e. the first index should be swapped
-		if(lFrom1.first != to1) lFrom1.reverse();
-		if(lTo1.second != from1) lTo1.reverse();	
-		if(lFrom2.first != to2) lFrom2.reverse();
-		if(lTo2.second != from2) lTo2.reverse();
+//		if(lFrom1.first != to1) lFrom1.reverse();
+//		if(lTo1.second != from1) lTo1.reverse();	
+//		if(lFrom2.first != to2) lFrom2.reverse();
+//		if(lTo2.second != from2) lTo2.reverse();
+		
+		// Reverse the direction between t1 & f2
+		for(int curr = from2; curr != from1;) {
+			Link cLink = links[curr];
+			cLink.reverse();
+			curr = cLink.next;
+		}
 		
 		// Make the swaps
-		lFrom1.first = to2;
-		lTo2.second = from1;
+		lFrom1.next = from2;
+		lFrom2.prev = from1;
 		
-		lFrom2.first = to1;
-		lTo1.second = from2;
+		lTo1.next = to2;		
+		lTo2.prev = to1;
 	}
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
 		sb.append("0\n");
-		int prev = 0;
 		int current = links[0].getNext();
 		
 		while(current != 0) {
-			sb.append(current + "\n");
-			
-			int next = links[current].getNext(prev);
-			prev = current;
-			current = next;
+			sb.append(current + "\n");			
+			current = links[current].getNext();
 		}
 		
 		return sb.toString();
@@ -98,108 +98,78 @@ public class Solution {
     		if(links[i] != null) break;  
     	}
     	
-    	int prev = i;
-    	list.add(prev);
-		int current = links[prev].getNext();
+    	list.add(i);
+		int current = links[i].getNext();
 		
 		while(current != i) {
 			list.add(current);
 			
-			int next = links[current].getNext(prev);
-			prev = current;
+			int next = links[current].getNext();
 			current = next;
 		}
 		return list;		
+	}
+	
+	public void insertPoint(int point, int after, int before) {
+		addLink(after, point);
+		addLink(point, before);
 	}
 	
 	public void addLink(Edge e) {
 		addLink(e.from.id, e.to.id);
 	}
 	public void addLink(int from, int to) {
-		Link lFrom = links[from];
-		if(lFrom == null) {
-			links[from] = new Link();
-			links[from].first = to;
-		} else if(lFrom.first == -1) {
-			lFrom.first = to;
-		} else if(lFrom.second == -1) {
-			lFrom.second = to;
-		} else {
-			//TODO: Exception or w/e?
-			System.err.println("Couldn't add link: " + from + "-" + to);
-		}
-		
-		Link lTo = links[to];
-		if(lTo == null) {
-			links[to] = new Link();
-			links[to].first = from;
-		} else if(lTo.first == -1) {
-			lTo.first = from;
-		} else if(lTo.second == -1) {
-			lTo.second = from;
-		} else {
-			//TODO: Exception or w/e?
-			System.err.println("Couldn't add link: " + from + "-" + to);
-		}
+		if(links[from] == null) links[from] = new Link();
+		links[from].next = to;
+		if(links[to] == null) links[to] = new Link();
+		links[to].prev = from;
 	}
 	
 	public class Link {
-		public int first;
-		public int second;
+		public int next;
+		public int prev;
 		
 		public Link() {
-			first = -1;
-			second = -1;
+			next = -1;
+			prev = -1;
 		}
 		
 		/**
-		 * Swap first and second
+		 * Swap direction
 		 */
 		public void reverse() {
-			first += second;			// f = f+s
-			second = first - second;	// s = (f+s) - s = f
-			first = first - second;		// f = (f+s) - f = s
+			next += prev;			// f = f+s
+			prev = next - prev;		// s = (f+s) - s = f
+			next = next - prev;		// f = (f+s) - f = s
 		}
 		
 		public int getNext() {
-			return first;
-		}
-		
-		/**
-		 * Gives the next index, coming from a given direction
-		 * 
-		 * @param prev Previous index
-		 * @return
-		 */
-		public int getNext(int prev) {
-			if(prev == first) {
-				return second;				
-			} else {
-				return first;
-			}
+			return next;
 		}
 		
 	} //Link
+
 	
+//	public Solution(int size) {
+//		links = new Link[size];
+//	}
 //	public static void main(String[] args) {
 //		Solution s = new Solution(4);
 //		for(int i = 0; i < 4; i++) {
 //			s.addLink(i, (i+1)%4);
 //		}
 //		System.out.println(s);
-//		s.switchLinks(0, 1, 3, 2);
+//		s.switchLinks(0, 1, 2, 3);
 //		System.out.println(s);
 //	}
 
 	public double distance() {
 		double dist = 0;
-		int prev = links[0].getNext();
 		int current = 0;
 		int next = -1;
 		while(next != 0) {
-			next = links[current].getNext(prev);
-			dist += Math.sqrt(problem.distance(current, next));
-			prev = current;
+			next = links[current].getNext();
+			dist += problem.distance(current, next);
 			current = next;
 		}
 		return dist;

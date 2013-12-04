@@ -71,18 +71,20 @@ public class Main {
 		else{
 
 			window = new Window(problem, 500, 500);
-			solution = new HullSolver(problem).solve(window, true);
-			//		Edge [] solution = new BruteSolver(points).solve();
+//			solution = new HullSolver(problem).solve();
+//			solution = new HullSolver(problem).solve(window, false);
+			solution = new GreedySolver(problem).solve();
+			//solution = new BruteSolver(points).solve();
 
 
 			//new Window(problem, 500, 500).addSolution(solution);
-//			window = new Window(points, 500,500).addSolution(points,solution);
+			window.addSolution(solution);
 
 
 			System.out.println(solution.distance());
 
 			//		TwoOpt t2 = new TwoOpt();
-//			new TwoOpt().opt(solution);
+			new TwoOpt().opt(solution);
 			//		new ThreeOpt().opt(solution);
 			//		new TwoOpt().opt(solution);
 			System.out.println("done");

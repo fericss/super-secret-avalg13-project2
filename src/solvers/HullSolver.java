@@ -39,7 +39,8 @@ public class HullSolver extends Solver {
 		// Pairwise comparison: find min-dist, OR
 		// find max(min-dist)
 		while(unvisit.size() > 0) {
-			findClosest(s, visit, unvisit);
+//			findClosest(s, visit, unvisit);
+			findFarthest(s, visit, unvisit);
 		}
 		
 		return s;
@@ -101,14 +102,15 @@ public class HullSolver extends Solver {
 					bestPoints[2] = curr;
 				}
 				int temp = curr;
-				curr = s.links[curr].getNext(prev);
+				curr = s.links[curr].getNext();
 				prev = temp;
 			}
 		}
 		//System.out.println("Connecting " + bestPoints[0] + " to " + bestPoints[1] + " and " + bestPoints[2]);
 		//s.printSolution();
-		s.addLink(bestPoints[0], bestPoints[0]);
-		s.switchLinks(bestPoints[0], bestPoints[0], bestPoints[1], bestPoints[2]);
+		s.insertPoint(bestPoints[0], bestPoints[1], bestPoints[2]);
+//		s.addLink(bestPoints[0], bestPoints[0]);
+//		s.switchLinks(bestPoints[0], bestPoints[0], bestPoints[1], bestPoints[2]);
 		visit.add(problem.points[bestPoints[0]]);
 		unvisit.remove(problem.points[bestPoints[0]]);
 	}
@@ -135,7 +137,7 @@ public class HullSolver extends Solver {
 					bestPoints[2] = curr;
 				}
 				int temp = curr;
-				curr = s.links[curr].getNext(prev);
+				curr = s.links[curr].getNext();
 				prev = temp;
 			}
 			
@@ -146,8 +148,9 @@ public class HullSolver extends Solver {
 		}
 		//System.out.println("Connecting " + bestPoints[0] + " to " + bestPoints[1] + " and " + bestPoints[2]);
 		//s.printSolution();
-		s.addLink(worstPoints[0], worstPoints[0]);
-		s.switchLinks(worstPoints[0], worstPoints[0], worstPoints[1], worstPoints[2]);
+		s.insertPoint(worstPoints[0], worstPoints[1], worstPoints[2]);
+//		s.addLink(worstPoints[0], worstPoints[0]);
+//		s.switchLinks(worstPoints[0], worstPoints[0], worstPoints[1], worstPoints[2]);
 		visit.add(problem.points[worstPoints[0]]);
 		unvisit.remove(problem.points[worstPoints[0]]);
 	}
