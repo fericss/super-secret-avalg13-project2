@@ -38,8 +38,7 @@ public class GreedySolver extends Solver {
 				}
 			}
 			used[best] = true;
-			tour.addLink(new Edge(p_i, points[best]));
-			System.out.println("Added link: " + p_i.id + " -> " + points[best].id);
+			tour.addLink(p_i.id, points[best].id);
 			p_i = points[best];
 		}		
 		tour.addLink(p_i.id, 0);

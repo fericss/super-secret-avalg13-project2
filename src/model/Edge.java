@@ -1,6 +1,7 @@
 package model;
 
 
+
 public class Edge {
 	public Point from;
 	public Point to;
@@ -56,8 +57,6 @@ public class Edge {
 				}
 				break;
 			}
-
-		// TODO Auto-generated method stub
 
 	}
 }

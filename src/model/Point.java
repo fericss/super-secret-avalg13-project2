@@ -1,5 +1,7 @@
 package model;
 
+import java.util.HashSet;
+
 import runnable.Main;
 
 
@@ -11,34 +13,40 @@ public class Point {
 	public double x;
 	public double y;
 
-	public Point [] nearbyPoints;
+	public HashSet<Point> nearbyPoints;
 
 	public Point(double d, double e){
 		id = PointNumber++;
 		x = d;
 		y = e;
+		nearbyPoints = new HashSet<Point>();
 	}
 
 	public void findNearbyPoints(Solution sol){
-		nearbyPoints = new Point[Main.NumNearbyPoints];
 		int y = 0;
+		Point[] candidates = new Point[Main.NumNearbyPoints];
 		for(Point p : sol.problem.points){
 			if(p == this) continue;
 			double distance = sol.problem.distance(p.id, this.id);
 			if(y < Main.NumNearbyPoints) {
-				nearbyPoints[y++] = p;
+				candidates[y++] = p;
 			} else {
-				for(int i = 0; i<nearbyPoints.length ; i++){
-					if(sol.problem.distance(nearbyPoints[i].id, this.id)>distance){
-						if(i<nearbyPoints.length-1){
-							nearbyPoints[i+1] = nearbyPoints[i];
+				for(int i = 0; i < Main.NumNearbyPoints; i++){
+					if(sol.problem.distance(candidates[i].id, this.id) > distance){
+						if(i < candidates.length-1){
+							candidates[i+1] = candidates[i];
 						}
-						nearbyPoints[i] = p;
+						candidates[i] = p;
 						break;
 					}
 				}
 			}
 		}
+		for(Point p : candidates) {
+			nearbyPoints.add(p);
+			p.nearbyPoints.add(this);
+		}
+
 
 	}
 

@@ -18,7 +18,7 @@ public class StupidSolver extends Solver {
 	public Solution solve(){
 		
 		Solution solution = new Solution(problem);
-		
+
 
 		for(int i = 0; i<problem.size-1;i++){
 			

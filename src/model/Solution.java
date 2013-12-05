@@ -12,6 +12,7 @@ public class Solution {
 		for(Point p : problem.points){
 			p.findNearbyPoints(this);
 		}
+
 	}
 	
 	/**

@@ -16,7 +16,7 @@ public class Main {
 	
 	public static Window window;
 
-	public static boolean KATTIS_MODE = false;
+	public static boolean KATTIS_MODE = true;
 	
 	public static int NumNearbyPoints = 15;
 
@@ -25,12 +25,14 @@ public class Main {
 	
 	
 	public static void main(String[] args){
-		long time = System.currentTimeMillis();
+//		long time = System.currentTimeMillis();
 		Deadline deadline = new Deadline(20000);
 
-
+		
 		Scanner sc = new Scanner(System.in);
 		int numPoints = Integer.parseInt(sc.nextLine());
+		
+		if(numPoints == 0) { return;}
 		
 		
 		if(numPoints>100){
@@ -58,22 +60,23 @@ public class Main {
 		sc.close();
 		problem = new TSPProblem(points);
 
+		
 		if(KATTIS_MODE){
-			
-			solution = new GreedySolver(problem).solve();
+			solution = new HullSolver(problem).solve();
+
 			new TwoOpt().opt(solution,deadline);
 			System.out.println(solution);
 			//			new TwoOpt().opt(solution,d);
 			//			Edge.printSolution(solution);
-			System.out.println("-->"+deadline.TimeUntil());
-			System.out.println("--"+(System.currentTimeMillis()-time));
+//			System.out.println("-->"+deadline.TimeUntil());
+//			System.out.println("--"+(System.currentTimeMillis()-time));
 		}
 		else{
 
 			window = new Window(problem, 500, 500);
-			solution = new HullSolver(problem).solve();
+//			solution = new HullSolver(problem).solve();
 //			solution = new HullSolver(problem).solve(window, false);
-//			solution = new GreedySolver(problem).solve();
+			solution = new GreedySolver(problem).solve();
 			//solution = new BruteSolver(points).solve();
 
 
@@ -84,7 +87,7 @@ public class Main {
 			System.out.println(solution.distance());
 
 			//		TwoOpt t2 = new TwoOpt();
-//			new TwoOpt().opt(solution);
+			new TwoOpt().opt(solution);
 			//		new ThreeOpt().opt(solution);
 			//		new TwoOpt().opt(solution);
 			System.out.println("done");

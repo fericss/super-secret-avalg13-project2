@@ -12,6 +12,13 @@ import model.Point;
 import model.Solution;
 import model.TSPProblem;
 
+/**
+ * Class for solving a TSP problem by generating the convex outer hull
+ * and adding points by iterating inwards.
+ * 
+ * @author Micke
+ *
+ */
 public class HullSolver extends Solver {
 	TSPProblem problem;
 	boolean[] visited;
@@ -36,6 +43,7 @@ public class HullSolver extends Solver {
 			else unvisit.add(problem.points[i]);
 		}
 		System.out.println();
+		
 		// Pairwise comparison: find min-dist, OR
 		// find max(min-dist)
 		while(unvisit.size() > 0) {
