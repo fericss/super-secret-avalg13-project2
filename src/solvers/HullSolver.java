@@ -33,6 +33,7 @@ public class HullSolver extends Solver {
 
 	@Override
 	public Solution solve() {
+			
 		Solution s = monotoneChain();
 		LinkedList<Point> visit = new LinkedList<Point>();
 		LinkedList<Point> unvisit = new LinkedList<Point>();
@@ -47,9 +48,12 @@ public class HullSolver extends Solver {
 		// Pairwise comparison: find min-dist, OR
 		// find max(min-dist)
 		while(unvisit.size() > 0) {
+			findAny(s, visit, unvisit);
 //			findClosest(s, visit, unvisit);
-			findFarthest(s, visit, unvisit);
+//			findFarthest(s, visit, unvisit);
 		}
+
+		
 		
 		return s;
 	}
@@ -76,7 +80,8 @@ public class HullSolver extends Solver {
 			if(closest) {
 				findClosest(s, visit, unvisit);				
 			} else {
-				findFarthest(s, visit, unvisit);
+//				findFarthest(s, visit, unvisit);
+				findAny(s, visit, unvisit);
 			}
 			try {
 				Thread.sleep(10000/problem.size);
@@ -90,11 +95,35 @@ public class HullSolver extends Solver {
 		return s;
 	}
 	
+	public void findAny(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
+		double bestCost = Double.MAX_VALUE;
+		int[] bestPoints = new int[3];
+		Point p = unvisit.pop();
+		
+		for(Point curr : p.nearbyPoints) {
+			if(s.links[curr.id] == null ) continue;
+			
+			int next = s.links[curr.id].next;
+			double cost = problem.distance(curr.id, p.id) + problem.distance(next, p.id) - problem.distance(next, curr.id);
+
+			if(cost < bestCost) {
+				bestCost = cost;
+				bestPoints[0] = p.id;
+				bestPoints[1] = curr.id;
+				bestPoints[2] = next;
+			}
+		}
+		
+		s.insertPoint(bestPoints[0], bestPoints[1], bestPoints[2]);
+		visit.add(problem.points[bestPoints[0]]);
+	}
+	
 	public void findClosest(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
 		double bestCost = Double.MAX_VALUE;
 		int[] bestPoints = new int[3];
+		
 		for(Point p : unvisit) {
-			int start = visit.get(0).id;
+			int start = visit.get(0).id; // This line crashes sometimes
 			
 			int prev = start;
 			int curr = s.links[start].getNext();
@@ -120,7 +149,7 @@ public class HullSolver extends Solver {
 //		s.addLink(bestPoints[0], bestPoints[0]);
 //		s.switchLinks(bestPoints[0], bestPoints[0], bestPoints[1], bestPoints[2]);
 		visit.add(problem.points[bestPoints[0]]);
-		unvisit.remove(problem.points[bestPoints[0]]);
+		unvisit.remove(problem.points[bestPoints[0]]); //TODO: This is O(n), find better
 	}
 	
 	public void findFarthest(Solution s, LinkedList<Point> visit, LinkedList<Point> unvisit) {
