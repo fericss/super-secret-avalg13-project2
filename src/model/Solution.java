@@ -9,10 +9,6 @@ public class Solution {
 	public Solution(TSPProblem _problem) {
 		problem = _problem;
 		links = new Link[problem.size];
-		for(Point p : problem.points){
-			p.findNearbyPoints(this);
-		}
-
 	}
 	
 	/**

@@ -10,6 +10,8 @@ import model.Edge;
 import model.Point;
 import model.Solution;
 import model.TSPProblem;
+import model.TourList;
+import model.TourList.TourNode;
 
 public class ChristofidesSolver extends Solver {
 	TSPProblem problem;
@@ -20,13 +22,16 @@ public class ChristofidesSolver extends Solver {
 
 	@Override
 	public Solution solve() {
+		// Find spanning tree using kruskal's algorithm
 		LinkedList<Edge> tree = kruskal();
+//		System.out.println("krusktree" + tree.size());
+		
+		// Find odd-degree nodes
 		int[] degree = new int[problem.size];
 		for(Edge e : tree) {
 			degree[e.to.id]++;
 			degree[e.from.id]++;
 		}
-		
 		LinkedList<Point> odd = new LinkedList<Point>();
 		for(int i = 0; i < problem.size; i++) {
 			if(degree[i] % 2 == 1) {
@@ -34,56 +39,94 @@ public class ChristofidesSolver extends Solver {
 			}
 		}
 		
-		LinkedList<Edge> matching = simpleMatch(odd);		
+		// Find a perfect matching
+		LinkedList<Edge> matching = greedyMatch(odd);
+		
+		// Combine matching with spanning tree
 		tree.addAll(matching);
 		
-		// Form Eulerian circuit in tree
+		// Form Eulerian circuit in combined tree
+		LinkedList<Point> eCircuit = eulerCircuit(tree);
 		
-		// Shortcut Eulerian -> Hamiltonian
+		// Shortcut Eulerian -> Hamiltonian		
+		Solution s = shortcut(eCircuit);
 		
-		Solution s = new Solution(problem);
-		
-		return null;
+		return s;
 	}
 	
-	public LinkedList<Edge> eulerCircuit(LinkedList<Edge> tree) {
-		ArrayList<LinkedList<Edge>> unused = new ArrayList<LinkedList<Edge>>(problem.size);
-		LinkedList<Point> unfinished = new LinkedList<Point>();
-		LinkedList<Edge> tour = new LinkedList<Edge>();
+	public Solution shortcut(LinkedList<Point> eCircuit) {
+		boolean[] visited = new boolean[problem.size];
+		Solution s = new Solution(problem);
 		
+		Point prev = null;
+		Point first = null;
+		for(Point p : eCircuit) {
+			if (visited[p.id]) {
+				continue;
+			}
+			if(prev != null) {
+				s.addLink(prev.id, p.id);
+			} else {
+				first = p;
+			}
+			visited[p.id] = true;
+			prev = p;
+		}
+		s.addLink(prev.id, first.id);
+		return s;
+	}
+	
+	public LinkedList<Point> eulerCircuit(LinkedList<Edge> tree) {
+		ArrayList<LinkedList<Edge>> unused = new ArrayList<LinkedList<Edge>>(problem.size);
+		for(int i = 0; i < problem.size; i++) {
+			unused.add(new LinkedList<Edge>());
+		}
+		LinkedList<TourNode> unfinished = new LinkedList<TourNode>();
+		TourList tour = new TourList();
+		
+		// Put each edge in the list of unused ones for corresponding nodes
 		for(Edge e : tree) {
+//			System.out.println("TreeEdge: "  + e.from.id + "-" + e.to.id);
 			unused.get(e.from.id).add(e);
 			unused.get(e.to.id).add(e);
 		}
-	
-		unfinished.add(problem.points[0]);
+		
+		// Add the first point to the tour, and to the list of unfinished nodes
+		tour.insert(problem.points[0]);
+		unfinished.add(tour.getCurr());
+		
 		while(!unfinished.isEmpty()) {
-			Point start = unfinished.pop();
-			Point curr = start;
-			LinkedList<Edge> currList = unused.get(curr.id);
+			TourNode start = unfinished.pop();
+			TourNode curr = start;
+			LinkedList<Edge> currList = unused.get(curr.p.id);
 			do {
+				// Check if any edges remain before we do anything
+				if(currList.isEmpty()) break;
+				
+				// Get the first remaining edge from the current node
 				Edge e = currList.pop();
-				
-				//TODO build tour;
-				
 				if(!currList.isEmpty()) {
+					// If that edge wasn't the last one, we're not finished with this node
 					unfinished.add(curr);
 				}
 				
-				if(curr != e.from) {
-					curr = e.from;
-				} else {
-					curr = e.to;
-				}
-				currList = unused.get(curr.id);
+				// Get next point and put it in tour, then move to that node
+				Point next = (curr.p != e.from ? e.from : e.to);
+				tour.insert(next, curr);
+				curr = tour.getNext();
+				
+				// Remove the traversed edge from the list of unused ones in the target node
+				currList = unused.get(curr.p.id);
 				currList.remove(e);
-			} while(curr != start);
+			} while(curr != start);	
+				// Stop when we get back to the starting point
+				// Note: we'll already have added the edge leading back to this node, so the tour is intact
 		}
 		
-		return tour;
+		return tour.getTour();
 	}
 	
-	public LinkedList<Edge> simpleMatch(LinkedList<Point> points) {
+	public LinkedList<Edge> greedyMatch(LinkedList<Point> points) {
 		boolean[] matched = new boolean[problem.size];
 		LinkedList<Edge> matching = new LinkedList<Edge>();
 		

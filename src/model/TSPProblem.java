@@ -15,6 +15,9 @@ public class TSPProblem {
 				dist[i][j] = Double.MAX_VALUE;
 			}
 		}
+		for(Point p : points){
+			p.findNearbyPoints(this);
+		}
 	}
 	
 	public double distance(int i, int j) {

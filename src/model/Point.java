@@ -22,17 +22,17 @@ public class Point {
 		nearbyPoints = new HashSet<Point>();
 	}
 
-	public void findNearbyPoints(Solution sol){
+	public void findNearbyPoints(TSPProblem tspProblem){
 		int y = 0;
 		Point[] candidates = new Point[Main.NumNearbyPoints];
-		for(Point p : sol.problem.points){
+		for(Point p : tspProblem.points){
 			if(p == this) continue;
-			double distance = sol.problem.distance(p.id, this.id);
+			double distance = tspProblem.distance(p.id, this.id);
 			if(y < Main.NumNearbyPoints) {
 				candidates[y++] = p;
 			} else {
 				for(int i = 0; i < Main.NumNearbyPoints; i++){
-					if(sol.problem.distance(candidates[i].id, this.id) > distance){
+					if(tspProblem.distance(candidates[i].id, this.id) > distance){
 						if(i < candidates.length-1){
 							candidates[i+1] = candidates[i];
 						}

@@ -63,7 +63,8 @@ public class Main {
 		
 		if(KATTIS_MODE){
 //			solution = new HullSolver(problem).solve();
-			solution = new GreedySolver(problem).solve();
+//			solution = new GreedySolver(problem).solve();
+			solution = new ChristofidesSolver(problem).solve();
 
 			new TwoOpt().opt(solution,deadline);
 			System.out.println(solution);
@@ -76,8 +77,9 @@ public class Main {
 
 			window = new Window(problem, 500, 500);
 //			solution = new HullSolver(problem).solve();
-			solution = new HullSolver(problem).solve(window, false);
+//			solution = new HullSolver(problem).solve(window, false);
 //			solution = new GreedySolver(problem).solve();
+			solution = new ChristofidesSolver(problem).solve();
 			//solution = new BruteSolver(points).solve();
 
 

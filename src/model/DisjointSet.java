@@ -13,7 +13,7 @@ import java.util.HashMap;
  */
 public class DisjointSet<Type> {
 	//ArrayList<Node> sets;
-	HashMap<Type, Node> map;
+	HashMap<Type, Node> map = new HashMap<Type, Node>();
 	
 	public void makeSet(Type t) {
 		Node n = new Node(t);
