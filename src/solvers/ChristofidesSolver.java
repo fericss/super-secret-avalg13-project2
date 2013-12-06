@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
 
+import runnable.Main;
+
 import model.DisjointSet;
 import model.Edge;
 import model.Point;
@@ -24,7 +26,7 @@ public class ChristofidesSolver extends Solver {
 	public Solution solve() {
 		// Find spanning tree using kruskal's algorithm
 		LinkedList<Edge> tree = kruskal();
-//		System.out.println("krusktree" + tree.size());
+//		System.out.println("krusktree" + tree.size() + "/" + problem.size);
 		
 		// Find odd-degree nodes
 		int[] degree = new int[problem.size];
@@ -34,6 +36,7 @@ public class ChristofidesSolver extends Solver {
 		}
 		LinkedList<Point> odd = new LinkedList<Point>();
 		for(int i = 0; i < problem.size; i++) {
+//			if(degree[i] == 0) System.out.println("tree missing: " + i); 
 			if(degree[i] % 2 == 1) {
 				odd.add(problem.points[i]);
 			}
@@ -41,12 +44,23 @@ public class ChristofidesSolver extends Solver {
 		
 		// Find a perfect matching
 		LinkedList<Edge> matching = greedyMatch(odd);
+//		System.out.println("odd: " + odd.size() + ", matches: " + matching.size());
 		
 		// Combine matching with spanning tree
 		tree.addAll(matching);
-		
+//		System.out.println("finaltree:" + tree.size());
+
+//		if(!Main.KATTIS_MODE) {
+//			Edge[] edges = new Edge[tree.size()];
+//			int i = 0;
+//			for(Edge e : tree) {
+//				edges[i++] = e;
+//			}
+//			Main.window.addEdges(edges);
+//		}
 		// Form Eulerian circuit in combined tree
 		LinkedList<Point> eCircuit = eulerCircuit(tree);
+//		System.out.println("eSize:" + eCircuit.size());
 		
 		// Shortcut Eulerian -> Hamiltonian		
 		Solution s = shortcut(eCircuit);
@@ -73,6 +87,9 @@ public class ChristofidesSolver extends Solver {
 			prev = p;
 		}
 		s.addLink(prev.id, first.id);
+//		for(int i = 0; i < problem.size; i++) {
+//			if(!visited[i]) System.out.println(i + " was not visited");
+//		}
 		return s;
 	}
 	
@@ -98,11 +115,12 @@ public class ChristofidesSolver extends Solver {
 		while(!unfinished.isEmpty()) {
 			TourNode start = unfinished.pop();
 			TourNode curr = start;
+			tour.setCurr(curr);
 			LinkedList<Edge> currList = unused.get(curr.p.id);
+			// Check if any edges remain before we do anything
+			if(currList.isEmpty()) continue;
+//			System.out.println("Starting from p" + start.p.id);
 			do {
-				// Check if any edges remain before we do anything
-				if(currList.isEmpty()) break;
-				
 				// Get the first remaining edge from the current node
 				Edge e = currList.pop();
 				if(!currList.isEmpty()) {
@@ -114,15 +132,18 @@ public class ChristofidesSolver extends Solver {
 				Point next = (curr.p != e.from ? e.from : e.to);
 				tour.insert(next, curr);
 				curr = tour.getNext();
+//				System.out.print(curr.p.id + ", ");
 				
 				// Remove the traversed edge from the list of unused ones in the target node
 				currList = unused.get(curr.p.id);
 				currList.remove(e);
-			} while(curr != start);	
+			} while(curr.p != start.p);
 				// Stop when we get back to the starting point
 				// Note: we'll already have added the edge leading back to this node, so the tour is intact
+//			System.out.println();
+//			Main.window.addEdges(tour.getEdges());
 		}
-		
+//		System.out.println("Returning");
 		return tour.getTour();
 	}
 	
@@ -161,7 +182,8 @@ public class ChristofidesSolver extends Solver {
 		
 		for(Point p : problem.points) {
 			ds.makeSet(p);
-			for(Point near : p.nearbyPoints) {
+//			for(Point near : p.nearbyPoints) {
+			for(Point near : problem.points) {	//TODO: p.nearbyPoints?
 				edges.add(new Edge(p, near));
 			}
 		}

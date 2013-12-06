@@ -2,6 +2,8 @@ package model;
 
 import java.util.LinkedList;
 
+import model.TourList.TourNode;
+
 
 public class TourList {
 	TourNode currNode;
@@ -25,6 +27,24 @@ public class TourList {
 			next();
 		} while(currNode != start);
 		return tour;
+	}
+	
+	public Edge[] getEdges() {
+		LinkedList<Point> points = getTour();
+		Edge[] edges = new Edge[points.size()];
+		Point prev = null;
+		Point first = null;
+		int i = 0;
+		for(Point p : points) {
+			if(prev != null) {
+				edges[i++] = new Edge(prev, p);
+			} else {
+				first = p;
+			}
+			prev = p;
+		}
+		edges[i] = new Edge(prev, first);
+		return edges;
 	}
 	
 	public TourNode getCurr() {
@@ -69,5 +89,9 @@ public class TourList {
 		TourNode prev = node.prev;
 		prev.next = next;
 		next.prev = prev;
+	}
+
+	public void setCurr(TourNode curr) {
+		currNode = curr;		
 	}
 }

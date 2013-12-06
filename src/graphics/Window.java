@@ -19,11 +19,13 @@ public class Window extends JPanel {
 	private static int numWindows = 0;
 	
 	Point [] points;
+	Edge[] edges;
 	Solution solution;
 	double maxX=Double.MIN_VALUE;
 	double maxY=Double.MIN_VALUE;
 	double minX=Double.MAX_VALUE;
 	double minY=Double.MAX_VALUE;
+	public boolean showText = false;
 	
 	double scale = 4;
 	
@@ -33,8 +35,8 @@ public class Window extends JPanel {
 	 * @param Y window height
 	 */
 	public void calculateScale(int X, int Y){
-		maxX=Double.MIN_VALUE;
-		maxY=Double.MIN_VALUE;
+		maxX=-Double.MAX_VALUE;
+		maxY=-Double.MAX_VALUE;
 		minX=Double.MAX_VALUE;
 		minY=Double.MAX_VALUE;
 		for(Point p : points){
@@ -51,7 +53,7 @@ public class Window extends JPanel {
 				minY = p.y;
 			}
 		}
-		if(maxX>maxY){
+		if(maxX/X>maxY/Y){
 			scale = (X-40)/(maxX);
 		}
 		else{
@@ -95,22 +97,32 @@ public class Window extends JPanel {
             			(int)(curr.y*scale-minY));
             	prev = curr;
             }            
+        } else if(edges != null) {
+            for(Edge e : edges) {
+            	g.drawLine(
+            			(int)(e.from.x*scale-minX), 
+            			(int)(e.from.y*scale-minY), 
+            			(int)(e.to.x*scale-minX), 
+            			(int)(e.to.y*scale-minY));            	
+            }
         }
         for(Point p : points){
         	if(p!=null) {
                 g.setColor(Color.red);
-            	g.fillOval((int)(p.x*scale-3-minX), (int)(p.y*scale-3-minY), 6, 6);
-                g.setColor(Color.blue);
-        		g.drawString(""+p.id, (int)(p.x*scale - minX) + 3, (int)(p.y*scale - minY) - 3 );
+            	g.fillOval((int)(p.x*scale-3-minX), (int)(p.y*scale-3-minY), 5, 5);
+            	if(showText) {
+                    g.setColor(Color.blue);
+            		g.drawString(""+p.id, (int)(p.x*scale - minX) + 3, (int)(p.y*scale - minY) - 3 );            		
+            	}
         	}
         }
         
     }
-//	public Window addEdges(Edge[] solution) {
-//		edges = solution;
-//		repaint();
-//		return this;
-//	}
+	public Window addEdges(Edge[] _edges) {
+		edges = _edges;
+		repaint();
+		return this;
+	}
 	public Window addSolution(Solution _solution) {
 		solution = _solution;
 		repaint();

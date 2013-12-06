@@ -76,6 +76,7 @@ public class Main {
 		else{
 
 			window = new Window(problem, 500, 500);
+			if(problem.size < 5000) window.showText = true;
 //			solution = new HullSolver(problem).solve();
 //			solution = new HullSolver(problem).solve(window, false);
 //			solution = new GreedySolver(problem).solve();
