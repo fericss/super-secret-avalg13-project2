@@ -182,8 +182,8 @@ public class ChristofidesSolver extends Solver {
 		
 		for(Point p : problem.points) {
 			ds.makeSet(p);
-//			for(Point near : p.nearbyPoints) {
-			for(Point near : problem.points) {	//TODO: p.nearbyPoints?
+			for(Point near : p.nearbyPoints) {
+//			for(Point near : problem.points) {	//TODO: p.nearbyPoints?
 				edges.add(new Edge(p, near));
 			}
 		}
@@ -195,6 +195,40 @@ public class ChristofidesSolver extends Solver {
 			if(n1 != n2) {
 				tree.add(e);
 				ds.Union(n1, n2);
+			}
+		}
+		
+		int numSets = ds.numSets();
+		if(numSets > 1) {
+			// NearbyPoints not enough to form a complete tree, we have to merge sets			
+			// TODO: using O(n) stupid solution, use O(n^2) for better results?
+			
+			Point[] sets = new Point[numSets]; // We want one member from each set in here
+			int n = 0;
+			for(int i = 0; i < numSets; i++) {
+				while(n < problem.size) {
+					Point p = problem.points[n++];
+					Point rep = ds.findSet(p).getObj();	// Representative for the disjoint set
+					
+					boolean bad = false;	// Does this representative appear in some other set?
+					for(int j = 0; j < i; j++) {
+						if(sets[j] == rep) {
+							bad = true;
+							break;
+						}
+					}
+					if(!bad) {
+						sets[i] = rep;
+						break;
+					}
+				}
+			}
+			
+			// Add edges between representatives of each set
+			for(int i = 0; i < numSets; i++) {
+				Point p1 = sets[i];
+				Point p2 = sets[(i+1)%numSets];
+				tree.add(new Edge(p1, p2));
 			}
 		}
 		

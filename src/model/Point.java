@@ -25,19 +25,25 @@ public class Point {
 	public void findNearbyPoints(TSPProblem tspProblem){
 		int y = 0;
 		Point[] candidates = new Point[Main.NumNearbyPoints];
+		double longestDist = 0;
+		int longestIndex = -1;
 		for(Point p : tspProblem.points){
 			if(p == this) continue;
 			double distance = tspProblem.distance(p.id, this.id);
 			if(y < Main.NumNearbyPoints) {
 				candidates[y++] = p;
-			} else {
-				for(int i = 0; i < Main.NumNearbyPoints; i++){
-					if(tspProblem.distance(candidates[i].id, this.id) > distance){
-						if(i < candidates.length-1){
-							candidates[i+1] = candidates[i];
-						}
-						candidates[i] = p;
-						break;
+				if(distance > longestDist) {
+					longestDist = distance;
+					longestIndex = y-1;
+				}
+			} else if(distance < longestDist) {
+				candidates[longestIndex] = p;
+				longestDist = 0;
+				for(int i = 0; i < Main.NumNearbyPoints; i++) {
+					double tempDist = tspProblem.distance(candidates[i].id, this.id);
+					if(tempDist > longestDist){
+						longestDist = tempDist;
+						longestIndex = i;
 					}
 				}
 			}

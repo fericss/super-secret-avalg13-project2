@@ -14,11 +14,17 @@ import java.util.HashMap;
 public class DisjointSet<Type> {
 	//ArrayList<Node> sets;
 	HashMap<Type, Node> map = new HashMap<Type, Node>();
+	private int numSets = 0;
+	
+	public int numSets() {
+		return numSets;
+	}
 	
 	public void makeSet(Type t) {
 		Node n = new Node(t);
 		//sets.add(n);
 		map.put(t, n);
+		numSets++;
 	}
 	
 	public Node findSet(Type t) { return findSet( map.get(t) ); }
@@ -47,6 +53,7 @@ public class DisjointSet<Type> {
 			yRoot.parent = xRoot;
 			xRoot.rank++;
 		}
+		numSets--;
 	}
 	
 	public class Node {
@@ -60,6 +67,10 @@ public class DisjointSet<Type> {
 			parent = this;
 			next = null;
 			rank = 0;
+		}
+		
+		public Type getObj() {
+			return object;
 		}
 	}
 }
