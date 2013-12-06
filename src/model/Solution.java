@@ -60,11 +60,7 @@ public class Solution {
 //		if(lTo2.second != from2) lTo2.reverse();
 		
 		// Reverse the direction between t1 & f2
-		for(int curr = from2; curr != from1;) {
-			Link cLink = links[curr];
-			cLink.reverse();
-			curr = cLink.next;
-		}
+		reverseFromTo(from1, from2);
 		
 		// Make the swaps
 		lFrom1.next = from2;
@@ -72,6 +68,54 @@ public class Solution {
 		
 		lTo1.next = to2;		
 		lTo2.prev = to1;
+	}
+
+	/**
+	 * @param from1
+	 * @param from2
+	 */
+	private void reverseFromTo(int from1, int from2) {
+		for(int curr = from2; curr != from1;) {
+			Link cLink = links[curr];
+			cLink.reverse();
+			curr = cLink.next;
+		}
+	}
+	
+	
+	public void switchLinks(int from1, int to1, int from2, int to2, int from3, int to3) {
+		Link lFrom1 = links[from1];
+		Link lFrom2 = links[from2];
+		Link lFrom3 = links[from3];
+		Link lTo1 = links[to1];
+		Link lTo2 = links[to2];
+		Link lTo3 = links[to3];
+		
+		
+		// Make sure every link is pointing in the right direction
+		// I.e. the first index should be swapped
+//		if(lFrom1.first != to1) lFrom1.reverse();
+//		if(lTo1.second != from1) lTo1.reverse();	
+//		if(lFrom2.first != to2) lFrom2.reverse();
+//		if(lTo2.second != from2) lTo2.reverse();
+		
+		// Reverse the direction between t1 & f2
+//		for(int curr = from2; curr != from1;) {
+//			Link cLink = links[curr];
+//			cLink.reverse();
+//			curr = cLink.next;
+//		}
+		
+		// Make the swaps
+		lFrom1.next = to2;
+		lFrom2.next = to3;
+		lFrom3.next = to1;
+		
+		lTo1.prev = from3;
+		lTo2.prev = from1;	
+		lTo3.prev = from2;	
+		
+		
 	}
 	
 	public String toString() {

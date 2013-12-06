@@ -16,7 +16,7 @@ public class Main {
 	
 	public static Window window;
 
-	public static boolean KATTIS_MODE = true;
+	public static boolean KATTIS_MODE = false;
 	
 	public static int NumNearbyPoints = 15;
 
@@ -91,11 +91,11 @@ public class Main {
 			System.out.println(solution.distance());
 
 			//		TwoOpt t2 = new TwoOpt();
-			new TwoOpt().opt(solution);
-			//		new ThreeOpt().opt(solution);
+//			new TwoOpt().opt(solution);
+					new ThreeOpt().opt(solution);
 			//		new TwoOpt().opt(solution);
 			System.out.println("done");
-			System.out.println(solution);
+//			System.out.println(solution);
 			System.out.println(solution.distance());
 
 //			window.repaint();
